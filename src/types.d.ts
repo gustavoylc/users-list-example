@@ -87,3 +87,10 @@ export interface Picture {
   medium: string
   thumbnail: string
 }
+
+export enum Columns {
+  NONE = 'none',
+  NAME = 'name',
+  LASTNAME = 'lastname',
+  COUNTRY = 'country'
+}

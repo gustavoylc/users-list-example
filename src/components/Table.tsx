@@ -1,20 +1,42 @@
-import { type User } from '../types.d'
+import { type User, Columns } from '../types.d'
 
 interface TableParams {
   users: User[]
   hasColor: boolean
   handleDelete: (email: string) => void
+  handleColumnSort: (sort: Columns) => void
 }
 
-export function Table({ users, hasColor, handleDelete }: TableParams) {
+export function Table({ users, hasColor, handleDelete, handleColumnSort }: TableParams) {
   return (
     <table width="100%">
       <thead>
         <tr>
           <th>Picture</th>
-          <th>Name</th>
-          <th>Last Name</th>
-          <th>Country</th>
+          <th
+            className="pointer"
+            onClick={() => {
+              handleColumnSort(Columns.NAME)
+            }}
+          >
+            Name
+          </th>
+          <th
+            className="pointer"
+            onClick={() => {
+              handleColumnSort(Columns.LASTNAME)
+            }}
+          >
+            Last Name
+          </th>
+          <th
+            className="pointer"
+            onClick={() => {
+              handleColumnSort(Columns.COUNTRY)
+            }}
+          >
+            Country
+          </th>
           <th>Action</th>
         </tr>
       </thead>

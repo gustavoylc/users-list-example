@@ -18,3 +18,7 @@
 .header_container_input{
   padding: 0 10px;
 }
+
+.pointer {
+  cursor: pointer;
+}
