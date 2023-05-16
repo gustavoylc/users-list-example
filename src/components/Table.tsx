@@ -3,9 +3,10 @@ import { type User } from '../types.d'
 interface TableParams {
   users: User[]
   hasColor: boolean
+  handleDelete: (email: string) => void
 }
 
-export function Table({ users, hasColor }: TableParams) {
+export function Table({ users, hasColor, handleDelete }: TableParams) {
   return (
     <table width="100%">
       <thead>
@@ -35,7 +36,13 @@ export function Table({ users, hasColor }: TableParams) {
               <td>{user.name.last}</td>
               <td>{user.location.country}</td>
               <td>
-                <button>Delete</button>
+                <button
+                  onClick={() => {
+                    handleDelete(user.email)
+                  }}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           )

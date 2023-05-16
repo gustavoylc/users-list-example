@@ -11,7 +11,7 @@ function App() {
   const sortedUsers = isSorted ? users.toSorted((a, b) => a.location.country.localeCompare(b.location.country)) : users
 
   useEffect(() => {
-    fetch('https://randomuser.me/api/?results=100')
+    fetch('https://randomuser.me/api/?results=100&seed=user')
       .then(async (res) => await res.json())
       .then((data) => {
         setUsers(data.results)
@@ -23,11 +23,15 @@ function App() {
 
   const handleRowsColor = () => {
     setHasColor((prevState) => !prevState)
-    console.log(hasColor)
   }
 
   const handleSort = () => {
     setIsSorted((prevState) => !prevState)
+  }
+
+  const handleDelete = (email: string) => {
+    const filteredUsers = users.filter((user) => user.email !== email)
+    setUsers(filteredUsers)
   }
 
   return (
@@ -40,7 +44,7 @@ function App() {
         </div>
       </header>
       <main>
-        <Table users={sortedUsers} hasColor={hasColor}></Table>
+        <Table users={sortedUsers} hasColor={hasColor} handleDelete={handleDelete} />
       </main>
     </>
   )
