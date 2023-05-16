@@ -2,11 +2,12 @@ import { type User } from '../types.d'
 
 interface TableParams {
   users: User[]
+  hasColor: boolean
 }
 
-export function Table({ users }: TableParams) {
+export function Table({ users, hasColor }: TableParams) {
   return (
-    <table>
+    <table width="100%">
       <thead>
         <tr>
           <th>Picture</th>
@@ -17,19 +18,28 @@ export function Table({ users }: TableParams) {
         </tr>
       </thead>
       <tbody>
-        {users.map((user) => (
-          <tr key={user.email}>
-            <td>
-              <img className="avatar" src={user.picture.thumbnail} alt={`${user.name.first}'s thumbnail`} />
-            </td>
-            <td>{user.name.first}</td>
-            <td>{user.name.last}</td>
-            <td>{user.location.country}</td>
-            <td>
-              <button>Delete</button>
-            </td>
-          </tr>
-        ))}
+        {users.map((user, index) => {
+          let rowColor = 'transparent'
+          if (hasColor) {
+            rowColor = '#302f2f'
+            if (index % 2 === 0) {
+              rowColor = '#464545'
+            }
+          }
+          return (
+            <tr key={user.email} style={{ backgroundColor: rowColor }}>
+              <td>
+                <img className="avatar" src={user.picture.thumbnail} alt={`${user.name.first}'s thumbnail`} />
+              </td>
+              <td>{user.name.first}</td>
+              <td>{user.name.last}</td>
+              <td>{user.location.country}</td>
+              <td>
+                <button>Delete</button>
+              </td>
+            </tr>
+          )
+        })}
       </tbody>
     </table>
   )
