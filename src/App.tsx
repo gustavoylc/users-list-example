@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
 import { type User } from './types.d'
 import { Table } from './components/Table'
@@ -9,15 +9,6 @@ function App() {
   const [isSorted, setIsSorted] = useState<boolean>(false)
   const originalUsers = useRef<User[]>([])
   const [searchByCountry, setSearchByCountry] = useState<null | string>(null)
-
-  const sortedUsers = isSorted
-    ? users.toSorted((a: User, b: User) => a.location.country.localeCompare(b.location.country))
-    : users
-
-  const filteredUsers =
-    searchByCountry != null
-      ? sortedUsers.filter((user) => user.location.country.toLowerCase().includes(searchByCountry.toLowerCase()))
-      : sortedUsers
 
   useEffect(() => {
     fetch('https://randomuser.me/api/?results=100&seed=user')
@@ -30,6 +21,18 @@ function App() {
         console.log(error)
       })
   }, [])
+
+  const filteredUsers = useMemo(() => {
+    return searchByCountry != null && searchByCountry.length >= 1
+      ? users.filter((user) => user.location.country.toLowerCase().includes(searchByCountry.toLowerCase()))
+      : users
+  }, [users, searchByCountry])
+
+  const sortedUsers = useMemo(() => {
+    return isSorted
+      ? filteredUsers.toSorted((a, b) => a.location.country.localeCompare(b.location.country))
+      : filteredUsers
+  }, [filteredUsers, isSorted])
 
   const handleRowsColor = () => {
     setHasColor((prevState) => !prevState)
@@ -69,7 +72,7 @@ function App() {
         </div>
       </header>
       <main>
-        <Table users={filteredUsers} hasColor={hasColor} handleDelete={handleDelete} />
+        <Table users={sortedUsers} hasColor={hasColor} handleDelete={handleDelete} />
       </main>
     </>
   )
