@@ -6,6 +6,9 @@ import { Table } from './components/Table'
 function App() {
   const [users, setUsers] = useState<User[]>([])
   const [hasColor, setHasColor] = useState<boolean>(false)
+  const [isSorted, setIsSorted] = useState<boolean>(false)
+
+  const sortedUsers = isSorted ? users.toSorted((a, b) => a.location.country.localeCompare(b.location.country)) : users
 
   useEffect(() => {
     fetch('https://randomuser.me/api/?results=100')
@@ -19,20 +22,25 @@ function App() {
   }, [])
 
   const handleRowsColor = () => {
-    setHasColor((prevState) => {
-      console.log(hasColor)
-      return !prevState
-    })
+    setHasColor((prevState) => !prevState)
     console.log(hasColor)
   }
+
+  const handleSort = () => {
+    setIsSorted((prevState) => !prevState)
+  }
+
   return (
     <>
       <header>
         <h1>Users List</h1>
-        <button onClick={handleRowsColor}>{hasColor ? 'Do not Draw Rows' : 'Draw Rows'}</button>
+        <div className="header_container">
+          <button onClick={handleRowsColor}>{hasColor ? 'Do not Draw Rows' : 'Draw Rows'}</button>
+          <button onClick={handleSort}>{isSorted ? 'Do not Sort' : 'Sort by country'}</button>
+        </div>
       </header>
       <main>
-        <Table users={users} hasColor={hasColor}></Table>
+        <Table users={sortedUsers} hasColor={hasColor}></Table>
       </main>
     </>
   )

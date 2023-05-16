@@ -8,3 +8,10 @@
 .avatar {
   border-radius: 5px;
 }
+
+.header_container{
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
