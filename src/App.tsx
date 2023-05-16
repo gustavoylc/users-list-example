@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import { type User } from './types.d'
 import { Table } from './components/Table'
@@ -7,6 +7,7 @@ function App() {
   const [users, setUsers] = useState<User[]>([])
   const [hasColor, setHasColor] = useState<boolean>(false)
   const [isSorted, setIsSorted] = useState<boolean>(false)
+  const originalUsers = useRef<User[]>([])
 
   const sortedUsers = isSorted ? users.toSorted((a, b) => a.location.country.localeCompare(b.location.country)) : users
 
@@ -15,6 +16,7 @@ function App() {
       .then(async (res) => await res.json())
       .then((data) => {
         setUsers(data.results)
+        originalUsers.current = data.results
       })
       .catch((error) => {
         console.log(error)
@@ -34,6 +36,10 @@ function App() {
     setUsers(filteredUsers)
   }
 
+  const handleRestore = () => {
+    setUsers(originalUsers.current)
+  }
+
   return (
     <>
       <header>
@@ -41,6 +47,7 @@ function App() {
         <div className="header_container">
           <button onClick={handleRowsColor}>{hasColor ? 'Do not Draw Rows' : 'Draw Rows'}</button>
           <button onClick={handleSort}>{isSorted ? 'Do not Sort' : 'Sort by country'}</button>
+          <button onClick={handleRestore}>Restore users</button>
         </div>
       </header>
       <main>
