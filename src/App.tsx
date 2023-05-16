@@ -8,8 +8,16 @@ function App() {
   const [hasColor, setHasColor] = useState<boolean>(false)
   const [isSorted, setIsSorted] = useState<boolean>(false)
   const originalUsers = useRef<User[]>([])
+  const [searchByCountry, setSearchByCountry] = useState<null | string>(null)
 
-  const sortedUsers = isSorted ? users.toSorted((a, b) => a.location.country.localeCompare(b.location.country)) : users
+  const sortedUsers = isSorted
+    ? users.toSorted((a: User, b: User) => a.location.country.localeCompare(b.location.country))
+    : users
+
+  const filteredUsers =
+    searchByCountry != null
+      ? sortedUsers.filter((user) => user.location.country.toLowerCase().includes(searchByCountry.toLowerCase()))
+      : sortedUsers
 
   useEffect(() => {
     fetch('https://randomuser.me/api/?results=100&seed=user')
@@ -40,6 +48,15 @@ function App() {
     setUsers(originalUsers.current)
   }
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const country = e.target.value
+    country.length === 0
+      ? setSearchByCountry(null)
+      : setTimeout(() => {
+          setSearchByCountry(country)
+        }, 500)
+  }
+
   return (
     <>
       <header>
@@ -48,10 +65,11 @@ function App() {
           <button onClick={handleRowsColor}>{hasColor ? 'Do not Draw Rows' : 'Draw Rows'}</button>
           <button onClick={handleSort}>{isSorted ? 'Do not Sort' : 'Sort by country'}</button>
           <button onClick={handleRestore}>Restore users</button>
+          <input type="search" className="header_container_input" placeholder="Mexico" onChange={handleChange} />
         </div>
       </header>
       <main>
-        <Table users={sortedUsers} hasColor={hasColor} handleDelete={handleDelete} />
+        <Table users={filteredUsers} hasColor={hasColor} handleDelete={handleDelete} />
       </main>
     </>
   )
