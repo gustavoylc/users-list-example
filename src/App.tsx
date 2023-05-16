@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import { type User } from './types.d'
+import { Table } from './components/Table'
 
 function App() {
   const [users, setUsers] = useState<User[]>([])
@@ -18,9 +19,7 @@ function App() {
 
   return (
     <>
-      {users.map((user) => (
-        <div key={user.email}>{user.name.first}</div>
-      ))}
+      <Table users={users}></Table>
     </>
   )
 }
