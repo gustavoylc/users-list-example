@@ -4,6 +4,20 @@ declare global {
   }
 }
 
+interface UsersFetch {
+  data?: Users
+  loading: boolean
+  error?: string
+  results: User[]
+}
+
+interface TableParams {
+  users: User[]
+  hasColor: boolean
+  handleDelete: (email: string) => void
+  handleSortBy: (sort: SortBy) => void
+}
+
 export interface Users {
   results: User[]
   info: Info
@@ -88,7 +102,7 @@ export interface Picture {
   thumbnail: string
 }
 
-export enum Columns {
+export enum SortBy {
   NONE = 'none',
   NAME = 'name',
   LASTNAME = 'lastname',

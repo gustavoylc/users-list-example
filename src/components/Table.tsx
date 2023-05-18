@@ -1,13 +1,6 @@
-import { type User, Columns } from '../types.d'
+import { SortBy, type TableParams } from '../types.d'
 
-interface TableParams {
-  users: User[]
-  hasColor: boolean
-  handleDelete: (email: string) => void
-  handleColumnSort: (sort: Columns) => void
-}
-
-export function Table({ users, hasColor, handleDelete, handleColumnSort }: TableParams) {
+export function Table({ users, hasColor, handleDelete, handleSortBy }: TableParams) {
   return (
     <table width="100%">
       <thead>
@@ -16,7 +9,7 @@ export function Table({ users, hasColor, handleDelete, handleColumnSort }: Table
           <th
             className="pointer"
             onClick={() => {
-              handleColumnSort(Columns.NAME)
+              handleSortBy(SortBy.NAME)
             }}
           >
             Name
@@ -24,7 +17,7 @@ export function Table({ users, hasColor, handleDelete, handleColumnSort }: Table
           <th
             className="pointer"
             onClick={() => {
-              handleColumnSort(Columns.LASTNAME)
+              handleSortBy(SortBy.LASTNAME)
             }}
           >
             Last Name
@@ -32,7 +25,7 @@ export function Table({ users, hasColor, handleDelete, handleColumnSort }: Table
           <th
             className="pointer"
             onClick={() => {
-              handleColumnSort(Columns.COUNTRY)
+              handleSortBy(SortBy.COUNTRY)
             }}
           >
             Country
